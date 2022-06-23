@@ -37,7 +37,7 @@ jobs:
           cd ./base-filesystem && zip -r base-filesystem.zip .
       - name: Create Release
         run: |
-          cd ./base-filesystem && gh release create ${{ env.PUBLISH_SERVER }} './base-filesystem.zip'
+          cd ./base-filesystem && gh release create ${{ env.RELEASE_VERSION }} './base-filesystem.zip'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
  #     - name: Publish to nexus
