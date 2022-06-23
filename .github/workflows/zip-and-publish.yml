@@ -13,13 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: CD base-filesystem
-        run: |
-          cd ./base-filesystem
-      # Runs a single command using the runners shell
       - name: Zip base-filesystem
         run: |
-          zip -r base-filesystem.zip
-      - name: Publish to nexus
+          cd ./base-filesystem && zip -r base-filesystem.zip
+      - name: Create Release
         run: |
-          curl -v -F r=releases -F hasPom=false -F g=com.adaptris -F a=base-filesystem -F v=1.0.0 -F p=zip -F file=@./base-filesystem.zip -u deployment:${{ secrets.NEXUS_REPO_PASSWORD }} https://nexus.adaptris.net/nexus/service/local/artifact/maven/content
+          cd ./base-filesystem && gh release create ${{ github.ref_name}} './base-filesystem.zip'
+ #     - name: Publish to nexus
+ #       run: |
+ #         curl -v -F r=releases -F hasPom=false -F g=com.adaptris -F a=base-filesystem -F v=1.0.0 -F p=zip -F file=@./base-filesystem.zip -u deployment:${{ secrets.NEXUS_REPO_PASSWORD }} https://nexus.adaptris.net/nexus/service/local/artifact/maven/content
