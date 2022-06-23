@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Zip base-filesystem
         run: |
-          cd ./base-filesystem && zip -r base-filesystem.zip
+          cd ./base-filesystem && zip -r base-filesystem.zip .
       - name: Create Release
         run: |
           cd ./base-filesystem && gh release create ${{ github.ref_name}} './base-filesystem.zip'
