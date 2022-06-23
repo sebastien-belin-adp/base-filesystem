@@ -4,8 +4,8 @@ on:
   create:
     tags:
       - '**'
-
-  # Allows you to run this workflow manually from the Actions tab
+  schedule:
+    - cron: 0 3 * * * # Daily 3 a.m.
   workflow_dispatch:
     inputs:
       release-version:
@@ -28,7 +28,7 @@ jobs:
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
       - name: Create Tag
-        if: github.event.inputs.release-version
+        if: github.event_name == 'workflow_dispatch'
         run: |
           git tag -a ${{ github.event.inputs.release-version }} -m "Add tag ${{ github.event.inputs.release-version }}"
           git push origin --tags
@@ -36,8 +36,15 @@ jobs:
         run: |
           cd ./base-filesystem && zip -r base-filesystem.zip .
       - name: Create Release
+        if: github.event_name != 'schedule'
         run: |
           cd ./base-filesystem && gh release create ${{ env.RELEASE_VERSION }} './base-filesystem.zip'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Update Nightly Release
+        if: github.event_name == 'schedule'
+        run: |
+          cd ./base-filesystem && gh release upload nightly './base-filesystem.zip' --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
  #     - name: Publish to nexus
