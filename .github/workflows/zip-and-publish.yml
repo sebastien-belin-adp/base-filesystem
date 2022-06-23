@@ -5,7 +5,8 @@ on:
     tags:
       - '**'
   schedule:
-    - cron: 0 3 * * * # Daily 3 a.m.
+#    - cron: 0 3 * * * # Daily 3 a.m.
+    - cron: '*/5 * * * *'  # Every 5mins
   workflow_dispatch:
     inputs:
       release-version:
