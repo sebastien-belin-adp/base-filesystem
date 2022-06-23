@@ -21,6 +21,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Create Tag
+        if: github.event.inputs.release-version
+        run: |
+          git tag -a ${{ github.event.inputs.release-version }}
+          git push origin --tags
       - name: Zip base-filesystem
         run: |
           cd ./base-filesystem && zip -r base-filesystem.zip .
