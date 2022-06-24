@@ -44,7 +44,7 @@ jobs:
       - name: Copy Templates
         # Copy the templates to the base-filesystem dir but ignoring git files
         run: |
-          mkdir ./base-filesystem/ui-resources/config-templates/
+          mkdir -p ./base-filesystem/ui-resources/config-templates/
           cp -rv `for f in ./interlok-templates/*;do echo "$f" | grep -vE "README.md|.whitesource|.git";done;` ./base-filesystem/ui-resources/config-templates/
       - name: Zip base-filesystem
         run: |
