@@ -38,7 +38,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           repository: adaptris/interlok-templates
           path: interlok-templates
-      - name: Zip base-filesystem
+      - name: Zip base-filesystem-no-templates
         run: |
           cd ./base-filesystem && zip -r base-filesystem-no-templates.zip .
       - name: Copy Templates
@@ -52,7 +52,7 @@ jobs:
       - name: Create Release
         if: github.event_name != 'schedule'
         run: |
-          cd ./base-filesystem && gh release create ${{ env.RELEASE_VERSION }} './base-filesystem.zip'
+          cd ./base-filesystem && gh release create ${{ env.RELEASE_VERSION }} './base-filesystem-no-templates.zip' './base-filesystem.zip'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Update Nightly Release
