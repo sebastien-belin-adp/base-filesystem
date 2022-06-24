@@ -32,6 +32,20 @@ jobs:
         run: |
           git tag -a ${{ github.event.inputs.release-version }} -m "Add tag ${{ github.event.inputs.release-version }}"
           git push origin --tags
+      - name: Checkout Templates
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: adaptris/interlok-templates
+          path: interlok-templates
+      - name: Zip base-filesystem
+        run: |
+          cd ./base-filesystem && zip -r base-filesystem-no-templates.zip .
+      - name: Copy Templates
+        # Copy the templates to the base-filesystem dir but ignoring git files
+        run: |
+          mkdir ./base-filesystem/interlok-templates/
+          cp -rv `for f in ./interlok-templates/*;do echo "$f" | grep -vE "README.md|.whitesource|.git";done;` ./base-filesystem/interlok-templates/
       - name: Zip base-filesystem
         run: |
           cd ./base-filesystem && zip -r base-filesystem.zip .
